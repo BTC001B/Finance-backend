@@ -47,7 +47,7 @@ exports.withdraw = async (req, res) => {
     const account = await Account.findOne({ where: { userId: userId }});
     if(!account) return res.status(404).json({ error: 'account not found' });
 
-    if(account.balance < amount) return res.status(400).json({ error: 'insufficient funds' });
+    if(account.balance < amount) return res.status(400).json({ error: 'insufficiently funds' });
 
     account.balance -= parseFloat(amount);
     await account.save();
