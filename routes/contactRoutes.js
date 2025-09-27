@@ -3,6 +3,8 @@ const router = express.Router();
 const contactController = require('../controllers/contactController');
 
 
+router.delete("/:id",contactController.deleteContact);
+router.put("/update",contactController.updateContactDetails);
 router.get("/id/:id",contactController.getContactByContactId);
 router.post('/create', contactController.createContact);
 router.post('/transaction', contactController.addTransaction);

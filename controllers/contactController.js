@@ -92,3 +92,36 @@ exports.getContactByContactId = async (req, res) => {
   }
 };
 
+exports.updateContactDetails = async (req, res) => {
+  try {
+    const item = await Contact.findByPk(req.body.id);
+
+    if (!item) {
+      return res.status(404).json({ error: "Contact Not Found" });
+    }
+
+    await item.update(req.body); // update already saves changes
+
+    res.json({ message: "Updated Successfully", data: item });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error occurred while updating Contact" });
+  }
+};
+
+
+exports.deleteContact = async (req,res)=>{
+  try{
+    const {id} = req.params;
+    const item = await Contact.findByPk(id);
+    if (!item) {
+      return res.status(404).json({ error: "Contact Not Found" });
+    }
+    await item.destroy();
+    res.json({ message: "Deleted Successfully", data: item });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error occurred while Deleting Contact" });
+  }
+}
