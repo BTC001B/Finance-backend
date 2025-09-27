@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const contactController = require('../controllers/contactController');
 
+
+router.get("/id/:id",contactController.getContactByContactId);
 router.post('/create', contactController.createContact);
 router.post('/transaction', contactController.addTransaction);
 router.get('/transactions/:contactId', contactController.getContactTransactions);

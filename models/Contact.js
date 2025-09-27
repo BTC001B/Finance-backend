@@ -14,9 +14,13 @@ const Contact = sequelize.define('contact', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  userId: { // ✅ Link each contact to a specific user
+  userId: { 
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  imageurl:{
+    type:DataTypes.STRING,
+    allowNull:true
   }
 }, {
   tableName: 'contacts',

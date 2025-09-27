@@ -7,7 +7,7 @@ exports.createContact = async (req, res) => {
   try {
     const contact = await Contact.create({
       ...req.body,
-      userId: req.body.userId // ✅ Ensure userId is saved
+      userId: req.body.userId 
     });
     res.json(contact);
   } catch (error) {
@@ -24,7 +24,7 @@ exports.addTransaction = async (req, res) => {
       amount: req.body.amount,
       date: req.body.date,
       note: req.body.note,
-      userId: req.body.userId // ✅ Ensure userId is saved
+      userId: req.body.userId                                                                                                                                                                                         
     });
     res.json(txn);
   } catch (error) {
@@ -39,11 +39,29 @@ exports.getContactTransactions = async (req, res) => {
     const transactions = await ContactTransaction.findAll({
       where: { contactId: req.params.contactId }
     });
-    res.json(transactions);
+
+    let totalPay = 0;
+    let totalGet = 0;
+
+    transactions.forEach(x => {
+      if (x.type === "pay") {
+        totalPay += x.amount;
+      }
+      if (x.type === "get") {
+        totalGet += x.amount;
+      }
+    });
+
+    res.json({
+      "Amount Paid": totalPay,
+      "Amount Gain": totalGet,
+      transactions
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Get all contacts for a user
 exports.getContactsByUserId = async (req, res) => {
@@ -54,6 +72,23 @@ exports.getContactsByUserId = async (req, res) => {
     res.json(contacts);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.getContactByContactId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const item = await Contact.findByPk(id);
+
+    if (!item) {
+      return res.status(404).json({ error: "File Not Found" }); // return to stop further execution
+    }
+
+    res.json({ item });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error occurring getting Contact" });
   }
 };
 
