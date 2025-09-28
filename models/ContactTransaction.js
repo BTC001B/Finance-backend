@@ -1,12 +1,13 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Contact = require('./Contact');
+const User = require("./User")
 
 const ContactTransaction = sequelize.define('ContactTransaction', {
   contactId: {
     type: DataTypes.INTEGER,
     allowNull: false
-  },
+  }, 
   type: {
     type: DataTypes.ENUM('pay', 'get'),
     allowNull: false
@@ -31,5 +32,7 @@ const ContactTransaction = sequelize.define('ContactTransaction', {
 // Association
 ContactTransaction.belongsTo(Contact, { foreignKey: 'contactId' });
 Contact.hasMany(ContactTransaction, { foreignKey: 'contactId' });
+
+
 
 module.exports = ContactTransaction;

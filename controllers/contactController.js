@@ -2,6 +2,7 @@ const Contact = require('../models/Contact');
 const ContactTransaction = require('../models/ContactTransaction');
 
 
+
 // Create new contact
 exports.createContact = async (req, res) => {
   try {
@@ -18,15 +19,25 @@ exports.createContact = async (req, res) => {
 // Pay or Get Transaction
 exports.addTransaction = async (req, res) => {
   try {
+    const { contactId, type, amount, date, note } = req.body;
+
+    // Ensure the contact exists
+    const contact = await Contact.findByPk(contactId);
+    if (!contact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    // Create the transaction
     const txn = await ContactTransaction.create({
-      contactId: req.body.contactId,
-      type: req.body.type,
-      amount: req.body.amount,
-      date: req.body.date,
-      note: req.body.note,
-      userId: req.body.userId                                                                                                                                                                                         
+      contactId,
+      type,
+      amount,
+      date,
+      note
+      // no need for userId, it's inherited via Contact
     });
-    res.json(txn);
+
+    res.status(201).json(txn);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -125,3 +136,53 @@ exports.deleteContact = async (req,res)=>{
     res.status(500).json({ error: "Error occurred while Deleting Contact" });
   }
 }
+
+exports.getAllTransactions = async (req, res) => {
+  try {
+    const id = req.params.userId;
+
+    // Fetch all transactions for contacts that belong to this user
+    const transactions = await ContactTransaction.findAll({
+      include: {
+        model: Contact,
+        where: { userId: userId }, // filter by Contact.userId
+        attributes: ['id', 'name'] // optional: include contact info
+      }
+    });
+
+    let totalPay = 0;
+    let totalGet = 0;
+
+    transactions.forEach(txn => {
+      if (txn.type === "pay") totalPay += txn.amount;
+      if (txn.type === "get") totalGet += txn.amount;
+    });
+    res.json({
+      "Amount Paid": totalPay,
+      "Amount Gain": totalGet,
+      transactions
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.updateTransactionDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const item = await ContactTransaction.findByPk(id);
+
+    if (!item) {
+      return res.status(404).json({ message: "Item Not Found" });
+    }
+
+    await item.update(req.body);
+    return res.json({ data: item });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed To Update" });
+  }
+};
+
