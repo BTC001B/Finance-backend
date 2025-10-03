@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const tripController = require('../controllers/tripController');
+const {authenticateToken}=require("../middlewares/AuthMiddleware");
 
-router.post('/create', tripController.createTrip);
+router.post('/create',authenticateToken, tripController.createTrip);
+router.post("/add",tripController.addMembers);
+router.get("/tripId/:tripId",tripController.getTripByTripId);
 router.post('/addTransaction', tripController.addTransaction);
 router.get('/trips', tripController.getAllTrips);
 router.get('/settlement/:tripId', tripController.calculateSettlement);

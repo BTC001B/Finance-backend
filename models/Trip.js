@@ -10,11 +10,6 @@ const Trip = sequelize.define('Trip', {
     type: DataTypes.DATEONLY,
     allowNull: false
   },
-  members: {
-    type: DataTypes.JSON,
-    allowNull: true,
-    comment: 'Stores an array of member names or IDs'
-  },
   userId: { // ✅ Added column for ownership
     type: DataTypes.INTEGER,
     allowNull: true, // temporary allowNull to avoid migration issues
