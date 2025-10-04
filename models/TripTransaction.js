@@ -3,7 +3,7 @@ const sequelize = require('../config/db');
 const Trip = require('./Trip');
 
 const TripTransaction = sequelize.define('TripTransaction', {
-  name: {
+  email: {
     type: DataTypes.STRING,
     allowNull: false
   },

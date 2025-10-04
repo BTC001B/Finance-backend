@@ -13,7 +13,12 @@ router.put('/trips/:tripId', tripController.editTrip);
 router.get('/user/:userId', tripController.getTripsByUserId);
 router.get('/trips/user/:userId', tripController.getTripsByUserId);
 router.delete('/trips/:tripId', tripController.deleteTrip);
-    
-
+router.get('/transaction/email/:email',tripController.getAllTransactionsByUserEmail);
+router.get('/transaction/email/:email/trip/:tripId',tripController.getAllTransactionsByUserEmail);
+router.get("/transaction/trip/:tripId",tripController.getAllTransactionsByTripId);
+router.put("/update/transactionid/:transactionId",tripController.updateTransaction);
+router.delete("/delete/transactionid/:transactionId",tripController.deleteTransaction);
+router.get('/members/:tripId',tripController.getAllMembersInTrip);
+router.get('/mytrip/:email',tripController.getMyTrips);
 
 module.exports = router;

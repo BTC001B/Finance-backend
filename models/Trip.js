@@ -14,6 +14,11 @@ const Trip = sequelize.define('Trip', {
     type: DataTypes.INTEGER,
     allowNull: true, // temporary allowNull to avoid migration issues
     defaultValue: null
+  },
+  participants:{
+    type:DataTypes.JSONB,
+    allowNull:false,
+    defaultValue: {} 
   }
 }, {
   tableName: 'Trips',
